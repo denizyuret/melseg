@@ -4,3 +4,58 @@
 	Modal_2016_1’de dogru segment yok (icerigi ‘null')
 	Modal_2016_5 sadece 1 dogru segment var
 	Modal_2016_2 gurultuluydu, sildim
+
+	* loaddata.jl: fixed some JSON problems (trailing commas etc) and
+	converted the data into JLD format in groupedMelSegData.jld.
+
+	* cosine.jl: compared cosine between (normalized) segments from
+	the reference and from true/false human performances.  Output in
+	jl file.  Here is a good example:
+
+	# r-r: [0.51783,0.843342,0.898515,0.936384,1.0]
+	# r-t: [0.281831,0.601221,0.722581,0.808675,0.955657]
+	# r-f: [-0.528476,0.52987,0.683308,0.779417,0.927576]
+
+	The numbers are the [0,.25,.5,.75,1] quantiles of all pairwise
+	cosines between reference (r), true (t), false (f).  There is
+	clearly information here but not enough.  Here is a bad example:
+
+	# r-r: [-0.417565,0.420223,0.641019,0.82493,1.0]
+	# r-t: [-0.248075,0.108873,0.162213,0.335487,0.83023]
+	# r-f: [-0.48789,-0.0693233,0.0767633,0.30544,0.889108]
+
+	* http://luks.fe.uni-lj.si/nluks/wp-content/uploads/2016/09/IWBF_2016.pdf
+	Random paper from google search: Pair-wise similarity learning for
+	face recognition.  They feed concatenated pairs of images to a
+	regular CNN with T/F output.
+
+	Ideas:
+	- Construct a (balanced) pair dataset.
+	- Try preprocessing (subsampling, normalizing) data before MLP.
+	- Try MLP.
+	- Try CNN.
+	- Try RNN.
+
+	* dataset: Construct a (balanced) pair dataset.
+	Our dataset contains:
+	2822 RefSegsTrue
+	298  PerSegsTrue
+	722  PerSegsFalse
+	21713 r-t pairs
+	55641 r-f pairs
+	130491 (r,t)-(r,t) pairs
+	60349 (r,t)-f pairs
+
+	130491 is the limit for true pairs, but we can generate more false
+	ones if we cross between melodies.  It would be good to keep the
+	30-70% true/false ratio during training.  Testing can be done on
+	unseen melodies, or random unseen pairs from the dataset.
+
+	* preprocessing: Our sequences are of length 1822, representing
+	the main frequency for 5-6 seconds.  The entries are around
+	5800-7300 where the scale is 1200 per octave and the whole dataset
+	is within 1.5 octaves, we can find the min and max and map to 0-1.
+	Standard audio tasks use 20-25ms, i.e. 40-50 samples/sec, so we
+	can resample 1822 down to 250-300 (check matlab resample
+	function).  DSP.jl has resample, y = resample(x,1/8) turns 1822
+	into 228 for example.
