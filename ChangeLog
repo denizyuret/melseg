@@ -1,0 +1,6 @@
+2017-01-02  Deniz Yuret  <dyuret@ku.edu.tr>
+
+	* groupedMelSegData.zip:
+	Modal_2016_1’de dogru segment yok (icerigi ‘null')
+	Modal_2016_5 sadece 1 dogru segment var
+	Modal_2016_2 gurultuluydu, sildim
