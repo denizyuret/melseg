@@ -18,6 +18,8 @@ function loaddata()
     return data
 end
 
+# JLD.save("groupedMelSegData.jld","data",loaddata())
+
 # function mat32(x)
 #     isa(x,Void) && return x
 #     cols = length(x)
