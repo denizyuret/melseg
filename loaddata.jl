@@ -1,16 +1,19 @@
 using JSON, JLD
 
-function loaddata()
+function loaddata(fmin=5800, fmax=7300)
     data  = Any[]
     files = readdir(".")
     for f in files
         ismatch(r"^\w+\.json$", f) || continue
         println(f)
         dict = JSON.parsefile(f)
-        for v in values(dict)
-            isa(v,Void) && continue
-            for i=1:length(v)
-                v[i] = convert(Array{Float32},v[i])
+        for (k,v) in dict
+            if isa(v,Void)
+                dict[k] = Any[]
+            else
+                for i=1:length(v)
+                    v[i] = (convert(Array{Float32},v[i]) - fmin) ./ (fmax-fmin)
+                end
             end
         end
         push!(data, dict)
