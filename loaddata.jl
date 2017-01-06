@@ -1,4 +1,4 @@
-using JSON, JLD
+using JSON, JLD, DSP
 
 function loaddata(fmin=5800, fmax=7300)
     data  = Any[]
@@ -22,6 +22,40 @@ function loaddata(fmin=5800, fmax=7300)
 end
 
 # JLD.save("groupedMelSegData.jld","data",loaddata())
+
+function subsample(data, rate)
+    sdata = Any[]
+    for dict in data
+        sdict = Dict()
+        for (k,v) in dict
+            svecs = Any[]
+            for a in v
+                push!(svecs, resample(a, rate))
+            end
+            sdict[k] = svecs
+        end
+        push!(sdata, sdict)
+    end
+    return sdata
+end
+
+function pairdata(data)
+    for d in data
+        t = vcat(d["RefSegsTrue"], d["PerSegsTrue"])
+        for i=1:length(t)-1
+            for j=i+1:length(t)
+                
+            end
+        end
+        f = d["PerSegsFalse"]
+        for i=1:length(t)
+            for j=1:length(f)
+
+            end
+        end
+        
+    end
+end
 
 # function mat32(x)
 #     isa(x,Void) && return x

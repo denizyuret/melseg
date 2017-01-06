@@ -30,8 +30,8 @@
 	regular CNN with T/F output.
 
 	Ideas:
+	- Try preprocessing (subsampling, normalizing) data before MLP,RNN.
 	- Construct a (balanced) pair dataset.
-	- Try preprocessing (subsampling, normalizing) data before MLP.
 	- Try MLP.
 	- Try CNN.
 	- Try RNN.
