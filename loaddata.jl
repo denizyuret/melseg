@@ -100,6 +100,7 @@ function trntst(pdata; batch=100, splt=((50000,50000),(5000,5000),(5000,5000)))
 end
 
 # To load and save KnetArrays:
+using Knet
 import JLD: writeas, readas
 type _KnetArray; a::Array; end
 writeas(c::KnetArray) = _KnetArray(Array(c))
