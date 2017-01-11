@@ -76,6 +76,7 @@ end
 # sample use script
 
 function mlprun(data; epochs=10, sizes=[3644,128,1], model=MLP(sizes; atype = typeof(data[1][1][1])))
+    println((:epoch,map(d->:accuracy,data)...,map(d->:loss,data)...))
     msg(e) = println((e,map(d->acc(model,d),data)...,map(d->test(model,d),data)...)); msg(0)
     for epoch = 1:epochs
         train!(model, data[1])
@@ -98,4 +99,12 @@ function cpu2gpu(m::MLP)
         g.oparams[i].scndm = KnetArray(g.oparams[i].scndm)
     end
     return g
+end
+
+function cpu2gpu(a)
+    if isa(a,Array) && isbits(eltype(a))
+        KnetArray(a)
+    else
+        map(cpu2gpu,a)
+    end
 end
