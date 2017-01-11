@@ -108,3 +108,8 @@ function cpu2gpu(a)
         map(cpu2gpu,a)
     end
 end
+
+# no-ref-ref experiments:
+# bdata = trntst(pairdata(data); splt=((20000,20000),(1700,1700)))
+# gdata = cpu2gpu(bdata)
+# mlprun(gdata, epochs=100)
