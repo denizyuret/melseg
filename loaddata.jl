@@ -50,17 +50,18 @@ function pairdata(data)
     tout = Float32[]
     fout = Float32[]
     for d in data
-        t = vcat(d["RefSegsTrue"], d["PerSegsTrue"])
-        for i=1:length(t)-1
-            for j=i+1:length(t)
-                append!(tout, t[i])
+        r = d["RefSegsTrue"]
+        t = d["PerSegsTrue"]
+        f = d["PerSegsFalse"]
+        for i=1:length(r)
+            for j=1:length(t)
+                append!(tout, r[i])
                 append!(tout, t[j])
             end
         end
-        f = d["PerSegsFalse"]
-        for i=1:length(t)
+        for i=1:length(r)
             for j=1:length(f)
-                append!(fout, t[i])
+                append!(fout, r[i])
                 append!(fout, f[j])
             end
         end
@@ -118,3 +119,13 @@ readas(d::_KnetArray) = KnetArray(d.a)
 #     end
 #     return m
 # end
+
+# Splitting the melodies:
+# @load "groupedMelSegData.jld" # loads data
+# trnpairs = pairdata(data[1:30])  # ((3644,17434),(3644,46135))
+# tstpairs = pairdata(data[31:40]) # ((3644,4279),(3644,9506))
+# trndata = trntst(trnpairs; splt=((17400,46100),))[1]
+# tstdata = trntst(tstpairs; splt=((4200,9500),))[1]
+# #trndata = map(a->(KnetArray(a[1]),KnetArray(a[2])), trndata)
+# #tstdata = map(a->(KnetArray(a[1]),KnetArray(a[2])), tstdata)
+# mlprun([trndata,tstdata]; epochs=100)
