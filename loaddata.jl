@@ -76,7 +76,7 @@ end
 
 
 # Split the pair data into a balanced train, dev and test set with a given minibatch size.
-function trntst(pdata; batch=100, splt=((50000,50000),(5000,5000),(5000,5000)))
+function trntst(pdata; batch=100, splt=((20000,50000),(1700,4300)))
     (xt,xf) = pdata
     (nd,nt) = size(xt)
     (nd,nf) = size(xf)
